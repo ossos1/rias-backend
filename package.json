@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@trashcore/baileys": "latest",
-    "@whiskeysockets/baileys": "npm:@trashcore/baileys@latest",
+    "@whiskeysockets/baileys":
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.18.2",
