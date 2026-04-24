@@ -7,6 +7,7 @@ const {
 } = require('@whiskeysockets/baileys');
 const pino = require('pino');
 const path = require('path');
+const crypto = require("crypto");
 
 // Store active sessions by phone number
 const sessions = new Map();
