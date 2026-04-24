@@ -39,37 +39,32 @@ async function pairNumber(phoneNumber) {
 
       sock.ev.on('creds.update', saveCreds);
 
-      // Wait for connection to register, then request pairing code
-      sock.ev.on('connection.update', async ({ connection, lastDisconnect, isNewLogin }) => {
-        if (connection === 'open') {
-          // Already linked — shouldn't happen on fresh pair
-          sessions.set(phoneNumber, sock);
-          startMessageHandler(sock, phoneNumber);
-          reject(new Error('Session already linked. No code needed.'));
-          return;
-        }
+      // ❗ Prevent re-pairing
+      if (state.creds.registered) {
+        return reject(new Error('Already paired. Delete session first.'));
+      }
 
-        if (connection === 'close') {
-          const code = lastDisconnect?.error?.output?.statusCode;
-          if (code !== DisconnectReason.loggedOut) {
-            // Reconnect handled elsewhere
+      sock.ev.on('connection.update', async (update) => {
+        const { connection } = update;
+
+        if (connection === 'connecting') {
+          try {
+            const code = await sock.requestPairingCode(phoneNumber);
+            const formatted = code.match(/.{1,4}/g)?.join('-') || code;
+
+            sessions.set(phoneNumber, sock);
+            resolve(formatted);
+          } catch (err) {
+            reject(err);
           }
         }
-      });
 
-      // Request pairing code after socket registers
-      setTimeout(async () => {
-        try {
-          const code = await sock.requestPairingCode(phoneNumber);
-          // Format as XXXX-XXXX
-          const formatted = code.match(/.{1,4}/g)?.join('-') || code;
+        if (connection === 'open') {
+          console.log('✅ WhatsApp linked successfully');
           sessions.set(phoneNumber, sock);
           startMessageHandler(sock, phoneNumber);
-          resolve(formatted);
-        } catch (err) {
-          reject(err);
         }
-      }, 3000);
+      });
 
     } catch (err) {
       reject(err);
