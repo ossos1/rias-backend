@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>RIAS — Made by Jinx Official</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --crimson: #c0062a;
+  --deep: #7a0018;
+  --rose: #ff2d55;
+  --gold: #e8b84b;
+  --gold2: #ffd97a;
+  --dark: #080810;
+  --darker: #04040a;
+  --card: rgba(255,255,255,0.025);
+  --border: rgba(192,6,42,0.25);
+  --border2: rgba(232,184,75,0.15);
+  --text: #f0dde5;
+  --muted: #7a6878;
+  --glow: rgba(255,45,85,0.4);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--darker);color:var(--text);font-family:'Rajdhani',sans-serif;font-weight:400;overflow-x:hidden;cursor:none;}
+
+/* ── CURSOR ── */
+#cur{position:fixed;width:8px;height:8px;background:var(--rose);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:screen;transition:width .15s,height .15s;}
+#cur-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(255,45,85,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);}
+body.hovering #cur{width:18px;height:18px;background:var(--gold);}
+body.hovering #cur-ring{width:50px;height:50px;border-color:var(--gold);}
+
+/* ── BACKGROUND ── */
+.bg-fixed{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.bg-img{position:absolute;inset:0;background:url('https://files.catbox.moe/kgnk6t.jpg') center/cover;opacity:0.13;filter:blur(2px) saturate(0.5) brightness(0.6);}
+.bg-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(192,6,42,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(192,6,42,.035) 1px,transparent 1px);background-size:80px 80px;}
+.bg-vignette{position:absolute;inset:0;background:radial-gradient(ellipse 80% 80% at 50% 50%,transparent 40%,rgba(4,4,10,.9) 100%);}
+.orb{position:absolute;border-radius:50%;filter:blur(100px);animation:orbf 10s ease-in-out infinite alternate;}
+.o1{width:500px;height:500px;background:rgba(192,6,42,.1);right:-5%;top:5%;animation-delay:0s;}
+.o2{width:300px;height:300px;background:rgba(232,184,75,.05);left:-3%;bottom:15%;animation-delay:-4s;}
+.o3{width:200px;height:200px;background:rgba(120,0,24,.08);left:40%;top:30%;animation-delay:-2s;}
+@keyframes orbf{from{transform:translateY(0) scale(1)}to{transform:translateY(-50px) scale(1.08)}}
+
+/* ── NOISE ── */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:1;opacity:.6;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:0 4rem;height:68px;display:flex;align-items:center;justify-content:space-between;background:rgba(4,4,10,.8);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'Cinzel Decorative',serif;font-size:1.4rem;color:var(--rose);letter-spacing:.2em;text-shadow:0 0 30px rgba(255,45,85,.4);}
+.nav-links{display:flex;gap:2.5rem;list-style:none;}
+.nav-links a{font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .3s,text-shadow .3s;}
+.nav-links a:hover{color:var(--gold);text-shadow:0 0 15px rgba(232,184,75,.4);}
+.nav-status{display:flex;align-items:center;gap:.6rem;font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.15em;color:var(--muted);}
+.status-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;animation:statusPulse 2s infinite;}
+@keyframes statusPulse{0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.4)}50%{box-shadow:0 0 0 6px rgba(34,197,94,0)}}
+
+/* ── MUSIC BAR ── */
+.music-bar{position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;display:flex;align-items:center;gap:.8rem;padding:.6rem 1.1rem;background:rgba(4,4,10,.9);border:1px solid var(--border);backdrop-filter:blur(20px);clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);}
+.eq{display:flex;align-items:flex-end;gap:2px;height:14px;}
+.eq span{display:block;width:2.5px;background:var(--rose);border-radius:2px;animation:eq .7s ease-in-out infinite alternate;}
+.eq span:nth-child(1){height:5px;animation-delay:0s;}
+.eq span:nth-child(2){height:11px;animation-delay:.12s;}
+.eq span:nth-child(3){height:8px;animation-delay:.24s;}
+.eq span:nth-child(4){height:14px;animation-delay:.08s;}
+.eq span:nth-child(5){height:6px;animation-delay:.2s;}
+@keyframes eq{from{transform:scaleY(.2)}to{transform:scaleY(1)}}
+.eq.paused span{animation-play-state:paused;transform:scaleY(.2);}
+.music-info{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--muted);letter-spacing:.12em;}
+.music-ctrl{background:none;border:none;cursor:none;color:var(--rose);font-size:.85rem;line-height:1;padding:0;}
+
+/* ── HERO ── */
+#hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:9rem 2rem 6rem;}
+.hero-inner{position:relative;z-index:2;text-align:center;max-width:900px;}
+
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.8rem;font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.35em;color:var(--gold);text-transform:uppercase;border:1px solid rgba(232,184,75,.2);padding:.45rem 1.2rem;margin-bottom:2.5rem;position:relative;overflow:hidden;}
+.hero-eyebrow::before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(232,184,75,.07);animation:eyebrowFill 2s 1s ease forwards;}
+@keyframes eyebrowFill{to{width:100%}}
+.eyebrow-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:statusPulse 1.5s infinite;}
+
+.rias-title{font-family:'Cinzel Decorative',serif;font-size:clamp(5rem,14vw,11rem);font-weight:900;line-height:.85;letter-spacing:.04em;position:relative;display:inline-block;margin-bottom:.5rem;}
+.rias-title-text{background:linear-gradient(150deg,#fff8fb 0%,#ffced9 30%,var(--rose) 60%,var(--deep) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 50px rgba(255,45,85,.25));}
+/* scanline effect on title */
+.rias-title::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(4,4,10,.04) 2px,rgba(4,4,10,.04) 4px);pointer-events:none;}
+
+.hero-sub{font-family:'Share Tech Mono',monospace;font-size:clamp(.7rem,1.5vw,.9rem);letter-spacing:.5em;text-transform:uppercase;color:var(--muted);margin:1.2rem 0 .8rem;}
+
+.hero-quote{font-family:'Cormorant Garamond',serif;font-size:clamp(1.1rem,2.5vw,1.5rem);font-style:italic;font-weight:300;color:rgba(240,221,229,.6);margin-bottom:3rem;line-height:1.5;}
+.hero-quote em{color:var(--rose);font-style:normal;}
+
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:.6rem;padding:.9rem 2.2rem;font-family:'Share Tech Mono',monospace;font-size:.7rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;border:none;cursor:none;position:relative;overflow:hidden;transition:all .3s;white-space:nowrap;}
+.btn::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);transform:translateX(-100%);transition:transform .5s ease;}
+.btn:hover::after{transform:translateX(100%);}
+.btn-prim{background:var(--crimson);color:#fff;clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);box-shadow:0 0 30px rgba(192,6,42,.3),inset 0 1px 0 rgba(255,255,255,.1);}
+.btn-prim:hover{background:var(--rose);box-shadow:0 0 50px rgba(255,45,85,.5),inset 0 1px 0 rgba(255,255,255,.15);}
+.btn-ghost{background:transparent;color:var(--gold);border:1px solid rgba(232,184,75,.35);clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);}
+.btn-ghost:hover{background:rgba(232,184,75,.06);border-color:rgba(232,184,75,.7);box-shadow:0 0 20px rgba(232,184,75,.15);}
+.btn-wa{background:linear-gradient(135deg,#075e54,#128c7e);color:#fff;clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);box-shadow:0 0 25px rgba(18,140,126,.25);}
+.btn-wa:hover{box-shadow:0 0 40px rgba(18,140,126,.5);}
+
+/* scroll hint */
+.scroll-cue{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;}
+.scroll-cue span{font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);opacity:.5;}
+.scroll-line{width:1px;height:45px;background:linear-gradient(to bottom,var(--crimson),transparent);animation:scrollA 2s ease-in-out infinite;}
+@keyframes scrollA{0%,100%{opacity:.2}60%{opacity:1}}
+
+/* ── SECTIONS ── */
+section{position:relative;z-index:2;padding:7rem 2rem;}
+.sec{max-width:1140px;margin:0 auto;}
+.sec-badge{display:inline-flex;align-items:center;gap:.6rem;font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--crimson);margin-bottom:.8rem;}
+.sec-badge::before{content:'';display:block;width:20px;height:1px;background:var(--crimson);}
+.sec-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.6rem,4vw,2.8rem);font-weight:700;color:#fff;line-height:1.15;margin-bottom:.8rem;}
+.sec-title em{font-style:normal;color:var(--rose);}
+.rule{width:50px;height:1px;background:linear-gradient(to right,var(--crimson),transparent);margin:1.2rem 0 2.5rem;}
+
+/* ── ABOUT ── */
+#about{background:linear-gradient(to bottom,rgba(4,4,10,.98),rgba(8,8,16,.98));}
+.about-layout{display:grid;grid-template-columns:1.1fr 1fr;gap:5rem;align-items:start;}
+.about-body p{font-family:'Cormorant Garamond',serif;font-size:1.15rem;line-height:1.85;color:#b898a8;margin-bottom:1rem;}
+.about-body strong{color:var(--rose);font-weight:600;}
+
+/* Terminal block */
+.terminal{margin-top:2rem;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.07);padding:1.2rem 1.5rem;position:relative;}
+.terminal-bar{display:flex;gap:.4rem;margin-bottom:.9rem;}
+.t-dot{width:10px;height:10px;border-radius:50%;}
+.t-dot:nth-child(1){background:#ff5f57;}
+.t-dot:nth-child(2){background:#febc2e;}
+.t-dot:nth-child(3){background:#28c840;}
+.t-label{font-family:'Share Tech Mono',monospace;font-size:.6rem;color:var(--muted);letter-spacing:.2em;position:absolute;top:.85rem;left:50%;transform:translateX(-50%);}
+.t-line{font-family:'Share Tech Mono',monospace;font-size:.8rem;color:#888;line-height:1.8;}
+.t-line.green{color:#22c55e;}
+.t-line.red{color:var(--rose);}
+.t-line.gold{color:var(--gold);}
+.typing-cursor{display:inline-block;width:8px;height:.9em;background:var(--rose);vertical-align:middle;animation:blink 1s step-end infinite;margin-left:2px;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* Stats row */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:2.5rem;border:1px solid var(--border);background:var(--border);}
+.stat-cell{background:var(--darker);padding:1.5rem;text-align:center;}
+.stat-num{font-family:'Cinzel Decorative',serif;font-size:1.8rem;color:var(--rose);display:block;line-height:1;}
+.stat-lbl{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:.3rem;display:block;}
+
+/* Traits */
+.trait-wrap{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
+.trait{display:flex;align-items:center;gap:1rem;padding:1rem 1.2rem;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);position:relative;overflow:hidden;transition:border-color .3s,background .3s;}
+.trait::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--crimson);transform:scaleY(0);transform-origin:bottom;transition:transform .4s ease;}
+.trait:hover{border-color:var(--border);background:rgba(192,6,42,.05);}
+.trait:hover::before{transform:scaleY(1);}
+.trait-ico{font-size:1.3rem;flex-shrink:0;}
+.trait-name{font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);}
+
+/* ── COMMANDS ── */
+#commands{background:rgba(6,6,14,.98);}
+.cmd-header{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;}
+.cmd-count{font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.2em;color:var(--muted);}
+
+/* Search */
+.cmd-search-wrap{position:relative;margin-bottom:1.5rem;}
+.cmd-search{width:100%;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);color:var(--text);padding:.8rem 1rem .8rem 2.8rem;font-family:'Share Tech Mono',monospace;font-size:.8rem;outline:none;transition:border-color .3s;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);}
+.cmd-search:focus{border-color:var(--crimson);}
+.cmd-search::placeholder{color:var(--muted);}
+.search-ico{position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.85rem;pointer-events:none;}
+
+/* Tabs */
+.cmd-tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.2rem;}
+.cmd-tab{padding:.45rem 1rem;font-family:'Share Tech Mono',monospace;font-size:.63rem;letter-spacing:.18em;text-transform:uppercase;background:transparent;color:var(--muted);border:1px solid rgba(255,255,255,.06);cursor:none;transition:all .25s;}
+.cmd-tab:hover,.cmd-tab.on{background:rgba(192,6,42,.12);color:var(--rose);border-color:var(--crimson);}
+
+/* Command grid */
+.cmd-box{border:1px solid var(--border);background:rgba(0,0,0,.3);max-height:460px;overflow-y:auto;padding:.6rem;scrollbar-width:thin;scrollbar-color:var(--crimson) transparent;}
+.cmd-box::-webkit-scrollbar{width:3px;}
+.cmd-box::-webkit-scrollbar-thumb{background:var(--crimson);border-radius:2px;}
+.cmd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.6rem;}
+.cmd-panel{display:none;}
+.cmd-panel.on{display:block;}
+
+.cmd-card{display:flex;align-items:flex-start;gap:.8rem;padding:.9rem 1rem;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.05);position:relative;overflow:hidden;transition:all .25s;cursor:default;}
+.cmd-card::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:linear-gradient(to right,var(--crimson),var(--rose));transition:width .35s ease;}
+.cmd-card:hover{background:rgba(192,6,42,.06);border-color:rgba(192,6,42,.2);}
+.cmd-card:hover::after{width:100%;}
+.cmd-emo{font-size:1.2rem;flex-shrink:0;margin-top:1px;}
+.cmd-name{font-family:'Share Tech Mono',monospace;font-size:.78rem;color:var(--rose);margin-bottom:.25rem;word-break:break-word;}
+.cmd-desc{font-size:.78rem;color:var(--muted);line-height:1.5;}
+.cmd-card.hidden{display:none;}
+
+/* ── DEPLOY ── */
+#deploy{background:linear-gradient(to bottom,rgba(6,6,14,.98),rgba(4,4,10,.98));text-align:center;}
+.deploy-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:3rem;text-align:left;}
+
+.d-card{background:rgba(255,255,255,.025);border:1px solid var(--border);padding:2.5rem;position:relative;overflow:hidden;transition:border-color .4s,transform .4s;}
+.d-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,var(--crimson),transparent);opacity:0;transition:opacity .4s;}
+.d-card:hover{transform:translateY(-6px);border-color:rgba(192,6,42,.5);}
+.d-card:hover::before{opacity:1;}
+
+.d-platform{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;}
+.d-ico{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
+.d-ico.wa{background:linear-gradient(135deg,#075e54,#25d366);}
+.d-ico.tg{background:linear-gradient(135deg,#0088cc,#29b5e8);}
+.d-name{font-family:'Cinzel Decorative',serif;font-size:1.1rem;color:#fff;}
+.d-tag{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.15em;color:var(--muted);}
+
+.d-desc{font-family:'Cormorant Garamond',serif;font-size:1rem;color:#a090a0;line-height:1.7;margin-bottom:1.5rem;}
+
+.d-input{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--text);padding:.75rem 1rem;font-family:'Share Tech Mono',monospace;font-size:.78rem;outline:none;margin-bottom:.7rem;transition:border-color .3s;clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);}
+.d-input:focus{border-color:var(--crimson);}
+.d-input::placeholder{color:var(--muted);}
+
+.d-status{display:none;margin-top:.8rem;padding:.7rem 1rem;border-left:2px solid var(--rose);background:rgba(192,6,42,.07);font-family:'Share Tech Mono',monospace;font-size:.7rem;line-height:1.7;color:#d4b0c0;}
+.d-status.show{display:block;animation:fadeUp .3s ease;}
+.pair-code{font-family:'Cinzel Decorative',serif;font-size:1.8rem;color:var(--gold);letter-spacing:.25em;text-align:center;margin:.5rem 0;text-shadow:0 0 25px rgba(232,184,75,.4);}
+
+/* ── FEATURES ── */
+#features{background:rgba(4,4,10,.99);}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2rem;}
+.feat-card{padding:2rem 1.8rem;background:var(--card);border:1px solid rgba(255,255,255,.05);position:relative;overflow:hidden;transition:all .35s;}
+.feat-card::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(192,6,42,.08) 0%,transparent 70%);opacity:0;transition:opacity .35s;}
+.feat-card:hover{border-color:var(--border);transform:translateY(-4px);}
+.feat-card:hover::after{opacity:1;}
+.feat-icon{font-size:2rem;margin-bottom:1rem;display:block;}
+.feat-title{font-family:'Rajdhani',sans-serif;font-size:1.1rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;margin-bottom:.5rem;}
+.feat-desc{font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--muted);line-height:1.6;}
+
+/* ── OWNER ── */
+#owner{background:rgba(4,4,10,.99);text-align:center;}
+.owner-wrap{max-width:480px;margin:3rem auto 0;background:rgba(255,255,255,.02);border:1px solid var(--border);padding:3rem;position:relative;}
+.owner-wrap::before,.owner-wrap::after{content:'';position:absolute;left:0;right:0;height:1px;background:linear-gradient(to right,transparent,var(--crimson),transparent);}
+.owner-wrap::before{top:0;}
+.owner-wrap::after{bottom:0;}
+.owner-avatar{width:90px;height:90px;border-radius:50%;margin:0 auto 1.5rem;border:2px solid var(--crimson);box-shadow:0 0 40px rgba(192,6,42,.35),0 0 80px rgba(192,6,42,.1);overflow:hidden;animation:avatarGlow 3s ease-in-out infinite;}
+.owner-avatar img{width:100%;height:100%;object-fit:cover;}
+@keyframes avatarGlow{0%,100%{box-shadow:0 0 40px rgba(192,6,42,.35),0 0 80px rgba(192,6,42,.1)}50%{box-shadow:0 0 60px rgba(255,45,85,.5),0 0 120px rgba(192,6,42,.2)}}
+.owner-name{font-family:'Cinzel Decorative',serif;font-size:1.3rem;color:#fff;margin-bottom:.3rem;}
+.owner-role{font-family:'Share Tech Mono',monospace;font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:1.5rem;}
+.owner-bio{font-family:'Cormorant Garamond',serif;font-size:1.05rem;color:var(--muted);line-height:1.7;margin-bottom:2rem;}
+
+/* social links */
+.owner-socials{display:flex;gap:.8rem;justify-content:center;margin-bottom:2rem;}
+.soc-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1.1rem;font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;text-decoration:none;border:1px solid rgba(255,255,255,.1);color:var(--muted);transition:all .3s;clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);}
+.soc-btn:hover{color:#fff;border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.05);}
+
+/* ── FOOTER ── */
+footer{background:var(--darker);border-top:1px solid var(--border);padding:2.5rem 2rem;text-align:center;position:relative;z-index:2;}
+.footer-logo{font-family:'Cinzel Decorative',serif;font-size:1rem;color:var(--rose);letter-spacing:.2em;margin-bottom:.5rem;}
+.footer-copy{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.2em;color:var(--muted);}
+.footer-copy span{color:var(--rose);}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.in{opacity:1;transform:translateY(0);}
+
+/* glitch */
+.glitch{position:relative;}
+.glitch::before,.glitch::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;background:linear-gradient(150deg,#fff8fb 0%,#ffced9 30%,var(--rose) 60%,var(--deep) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.glitch::before{left:2px;top:-1px;animation:g1 5s infinite;clip-path:polygon(0 15%,100% 15%,100% 35%,0 35%);}
+.glitch::after{left:-2px;top:1px;animation:g2 5s infinite;clip-path:polygon(0 65%,100% 65%,100% 85%,0 85%);}
+@keyframes g1{0%,88%,100%{opacity:0;transform:none}90%{opacity:.6;transform:translateX(4px)}92%{opacity:0;transform:translateX(-2px)}94%{opacity:.4;transform:translateX(2px)}}
+@keyframes g2{0%,85%,100%{opacity:0;transform:none}87%{opacity:.4;transform:translateX(-4px)}89%{opacity:0}91%{opacity:.3;transform:translateX(2px)}}
+
+/* ── HAMBURGER ── */
+.ham-btn{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:none;padding:.4rem;z-index:600;}
+.ham-btn span{display:block;width:24px;height:1.5px;background:var(--rose);transition:all .35s ease;transform-origin:center;}
+.ham-btn.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.ham-btn.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+.ham-btn.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+
+/* Mobile drawer */
+.mobile-drawer{position:fixed;inset:0;z-index:450;pointer-events:none;}
+.mobile-drawer-bg{position:absolute;inset:0;background:rgba(4,4,10,.85);backdrop-filter:blur(10px);opacity:0;transition:opacity .35s ease;}
+.mobile-drawer-panel{position:absolute;top:0;right:0;bottom:0;width:min(300px,85vw);background:rgba(8,8,16,.97);border-left:1px solid var(--border);display:flex;flex-direction:column;padding:6rem 2rem 3rem;gap:.3rem;transform:translateX(100%);transition:transform .4s cubic-bezier(.4,0,.2,1);}
+.mobile-drawer.open .mobile-drawer-bg{opacity:1;pointer-events:all;}
+.mobile-drawer.open .mobile-drawer-panel{transform:translateX(0);pointer-events:all;}
+.mobile-drawer-panel a{font-family:'Share Tech Mono',monospace;font-size:.8rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:.9rem 0;border-bottom:1px solid rgba(255,255,255,.04);transition:color .3s,padding-left .3s;}
+.mobile-drawer-panel a:hover{color:var(--gold);padding-left:.8rem;}
+.mobile-drawer-logo{font-family:'Cinzel Decorative',serif;font-size:1.1rem;color:var(--rose);letter-spacing:.2em;margin-bottom:2rem;}
+.mobile-drawer-status{display:flex;align-items:center;gap:.6rem;font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.15em;color:var(--muted);margin-top:auto;padding-top:2rem;border-top:1px solid var(--border);}
+
+/* ── AI CHAT DEMO ── */
+#chat-demo{background:linear-gradient(to bottom,rgba(4,4,10,.99),rgba(6,6,14,.99));}
+.chat-wrap{max-width:760px;margin:0 auto;}
+.chat-window{background:rgba(0,0,0,.5);border:1px solid var(--border);position:relative;overflow:hidden;}
+.chat-topbar{display:flex;align-items:center;gap:1rem;padding:1rem 1.5rem;border-bottom:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.02);}
+.chat-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--deep),var(--crimson));display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;box-shadow:0 0 15px rgba(192,6,42,.4);}
+.chat-topbar-name{font-family:'Share Tech Mono',monospace;font-size:.75rem;letter-spacing:.15em;color:#fff;}
+.chat-topbar-status{font-size:.65rem;color:#22c55e;letter-spacing:.1em;}
+.chat-msgs{height:360px;overflow-y:auto;padding:1.5rem;display:flex;flex-direction:column;gap:1rem;scrollbar-width:thin;scrollbar-color:var(--crimson) transparent;}
+.chat-msgs::-webkit-scrollbar{width:3px;}
+.chat-msgs::-webkit-scrollbar-thumb{background:var(--crimson);}
+.msg{display:flex;gap:.8rem;animation:msgIn .3s ease;}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.msg.user{flex-direction:row-reverse;}
+.msg-avatar{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.75rem;}
+.msg-avatar.rias-av{background:linear-gradient(135deg,var(--deep),var(--crimson));box-shadow:0 0 10px rgba(192,6,42,.3);}
+.msg-avatar.user-av{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.1);}
+.msg-bubble{max-width:75%;padding:.75rem 1rem;font-family:'Rajdhani',sans-serif;font-size:.95rem;line-height:1.5;position:relative;}
+.msg.rias .msg-bubble{background:rgba(192,6,42,.12);border:1px solid rgba(192,6,42,.2);border-radius:0 12px 12px 12px;color:var(--text);}
+.msg.user .msg-bubble{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:12px 0 12px 12px;color:var(--text);}
+.msg-name{font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;margin-bottom:.3rem;color:var(--muted);}
+.msg.rias .msg-name{color:var(--rose);}
+.msg.user .msg-name{color:var(--gold);text-align:right;}
+.typing-dots{display:flex;gap:4px;align-items:center;padding:.4rem 0;}
+.typing-dots span{width:6px;height:6px;border-radius:50%;background:var(--rose);animation:dot .8s ease-in-out infinite;}
+.typing-dots span:nth-child(2){animation-delay:.15s;}
+.typing-dots span:nth-child(3){animation-delay:.3s;}
+@keyframes dot{0%,80%,100%{transform:scale(.7);opacity:.4}40%{transform:scale(1);opacity:1}}
+.chat-input-row{display:flex;gap:.6rem;padding:1rem 1.2rem;border-top:1px solid rgba(255,255,255,.05);background:rgba(255,255,255,.01);}
+.chat-input{flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--text);padding:.7rem 1rem;font-family:'Rajdhani',sans-serif;font-size:.95rem;outline:none;transition:border-color .3s;clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);cursor:auto;}
+.chat-input:focus{border-color:var(--crimson);}
+.chat-input::placeholder{color:var(--muted);}
+.chat-send{background:var(--crimson);border:none;color:#fff;padding:.7rem 1.2rem;cursor:none;font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.15em;transition:all .3s;clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);white-space:nowrap;}
+.chat-send:hover{background:var(--rose);}
+.chat-send:disabled{opacity:.4;cursor:not-allowed;}
+.chat-suggestions{display:flex;gap:.5rem;flex-wrap:wrap;padding:.8rem 1.2rem 0;}
+.chat-sug{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);color:var(--muted);padding:.35rem .8rem;font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.1em;cursor:none;transition:all .25s;clip-path:polygon(4px 0,100% 0,calc(100% - 4px) 100%,0 100%);}
+.chat-sug:hover{background:rgba(192,6,42,.1);color:var(--rose);border-color:var(--crimson);}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:0 1.5rem;}
+  .nav-links,.nav-status{display:none;}
+  .ham-btn{display:flex;}
+  .about-layout{grid-template-columns:1fr;gap:3rem;}
+  .trait-wrap{grid-template-columns:1fr 1fr;}
+  .deploy-grid{grid-template-columns:1fr;}
+  .feat-grid{grid-template-columns:1fr 1fr;}
+  .stats-row{grid-template-columns:1fr 1fr 1fr;}
+  .music-bar{bottom:1rem;right:1rem;padding:.5rem .8rem;}
+  section{padding:5rem 1.2rem;}
+}
+@media(max-width:600px){
+  .feat-grid{grid-template-columns:1fr;}
+  .trait-wrap{grid-template-columns:1fr;}
+  .cmd-grid{grid-template-columns:1fr;}
+  .hero-btns{flex-direction:column;align-items:center;}
+  .chat-msgs{height:280px;}
+  .stats-row{grid-template-columns:1fr;}
+  .cmd-tabs{gap:.3rem;}
+  .cmd-tab{font-size:.55rem;padding:.4rem .7rem;}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- BG -->
+<div class="bg-fixed">
+  <div class="bg-img"></div>
+  <div class="bg-grid"></div>
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+  <div class="orb o3"></div>
+  <div class="bg-vignette"></div>
+</div>
+
+<!-- Audio -->
+<audio id="bgMusic" loop src="https://files.catbox.moe/jv0rmh.m4a" preload="auto"></audio>
+
+<!-- Music Bar -->
+<div class="music-bar">
+  <div class="eq" id="eq"><span></span><span></span><span></span><span></span><span></span></div>
+  <span class="music-info">RIAS OST</span>
+  <button class="music-ctrl" id="mBtn" onclick="toggleMusic()">▶</button>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">RIAS</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#commands">Commands</a></li>
+    <li><a href="#chat-demo">Try RIAS</a></li>
+    <li><a href="#deploy">Deploy</a></li>
+    <li><a href="#owner">Owner</a></li>
+  </ul>
+  <div class="nav-status"><div class="status-dot"></div>SYSTEM ONLINE</div>
+  <button class="ham-btn" id="hamBtn" onclick="toggleDrawer()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- MOBILE DRAWER -->
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="mobile-drawer-bg" onclick="closeDrawer()"></div>
+  <div class="mobile-drawer-panel">
+    <div class="mobile-drawer-logo">RIAS</div>
+    <a href="#about" onclick="closeDrawer()">About</a>
+    <a href="#features" onclick="closeDrawer()">Features</a>
+    <a href="#commands" onclick="closeDrawer()">Commands</a>
+    <a href="#chat-demo" onclick="closeDrawer()">⚡ Try RIAS</a>
+    <a href="#deploy" onclick="closeDrawer()">Deploy</a>
+    <a href="#owner" onclick="closeDrawer()">Owner</a>
+    <a href="https://wa.me/2348075997375?text=Hey%20Jinx!" target="_blank" onclick="closeDrawer()" style="color:var(--gold);margin-top:.5rem;">💬 Contact Jinx</a>
+    <div class="mobile-drawer-status"><div class="status-dot"></div>RIAS SYSTEM ONLINE</div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><div class="eyebrow-dot"></div>// Intelligence Active — v2.0.0</div>
+    <div class="rias-title">
+      <div class="rias-title-text glitch" data-text="RIAS">RIAS</div>
+    </div>
+    <p class="hero-sub">Remotely Intelligent Autonomous System</p>
+    <p class="hero-quote">"I don't follow orders. I choose <em>who's worth serving</em>."</p>
+    <div class="hero-btns">
+      <a href="#deploy" class="btn btn-prim">⚡ Deploy Now</a>
+      <a href="#commands" class="btn btn-ghost">📋 Commands</a>
+      <a href="https://wa.me/2348075997375?text=Hey%20Jinx!" target="_blank" class="btn btn-wa">💬 Contact Owner</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><div class="scroll-line"></div><span>Scroll</span></div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="sec">
+    <div class="about-layout">
+      <div class="reveal">
+        <div class="sec-badge">01 — About</div>
+        <h2 class="sec-title">Who is <em>RIAS</em>?</h2>
+        <div class="rule"></div>
+        <div class="about-body">
+          <p>RIAS is not just a bot. She's a <strong>full-spectrum digital entity</strong> — built to dominate your WhatsApp and Telegram experience with intelligence, wit, and an iron grip on your groups.</p>
+          <p>From <strong>group management</strong> and smart <strong>automation</strong> to <strong>AI-powered conversations</strong> and pure entertainment — RIAS handles it all in her own unforgettable way.</p>
+          <p>She doesn't beg for attention. She <strong>commands it</strong>.</p>
+        </div>
+
+        <div class="terminal">
+          <div class="terminal-bar">
+            <div class="t-dot"></div><div class="t-dot"></div><div class="t-dot"></div>
+            <div class="t-label">rias_boot.sh</div>
+          </div>
+          <div class="t-line">$ <span style="color:#d4b0c0">./start_rias --mode=full</span></div>
+          <div class="t-line green" id="tl1" style="opacity:0">✓ Core intelligence loaded</div>
+          <div class="t-line green" id="tl2" style="opacity:0">✓ Group management module active</div>
+          <div class="t-line green" id="tl3" style="opacity:0">✓ AI chat engine initialized</div>
+          <div class="t-line gold" id="tl4" style="opacity:0">⟳ Connecting to WhatsApp & Telegram...</div>
+          <div class="t-line red" id="tl5" style="opacity:0">● RIAS IS ONLINE. Proceed with caution.<span class="typing-cursor"></span></div>
+        </div>
+
+        <div class="stats-row reveal">
+          <div class="stat-cell"><span class="stat-num" data-target="40">0</span><span class="stat-lbl">Commands</span></div>
+          <div class="stat-cell"><span class="stat-num" data-target="2">0</span><span class="stat-lbl">Platforms</span></div>
+          <div class="stat-cell"><span class="stat-num" data-target="24">0</span><span class="stat-lbl">Hr Active</span></div>
+        </div>
+      </div>
+
+      <div class="reveal" style="transition-delay:.15s;">
+        <div class="trait-wrap">
+          <div class="trait"><span class="trait-ico">🧠</span><span class="trait-name">Intelligent</span></div>
+          <div class="trait"><span class="trait-ico">🔥</span><span class="trait-name">Sassy</span></div>
+          <div class="trait"><span class="trait-ico">🎨</span><span class="trait-name">Creative</span></div>
+          <div class="trait"><span class="trait-ico">🦁</span><span class="trait-name">Confident</span></div>
+          <div class="trait"><span class="trait-ico">🌹</span><span class="trait-name">Loyal</span></div>
+          <div class="trait"><span class="trait-ico">🌙</span><span class="trait-name">Mysterious</span></div>
+          <div class="trait"><span class="trait-ico">⚔️</span><span class="trait-name">Dominant</span></div>
+          <div class="trait"><span class="trait-ico">🎭</span><span class="trait-name">Charismatic</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="sec">
+    <div class="reveal" style="text-align:center;margin-bottom:1rem;">
+      <div class="sec-badge" style="justify-content:center;">02 — Capabilities</div>
+      <h2 class="sec-title">What She <em>Rules</em></h2>
+      <div class="rule" style="margin:1.2rem auto 0;"></div>
+    </div>
+    <div class="feat-grid reveal">
+      <div class="feat-card">
+        <span class="feat-icon">⚔️</span>
+        <div class="feat-title">Group Control</div>
+        <div class="feat-desc">Full admin arsenal — kick, ban, mute, promote, lock. RIAS keeps order so you don't have to.</div>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">🤖</span>
+        <div class="feat-title">AI Conversations</div>
+        <div class="feat-desc">Ask her anything. She answers with wit, precision, and zero tolerance for boring replies.</div>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">⚙️</span>
+        <div class="feat-title">Smart Automation</div>
+        <div class="feat-desc">Auto-welcome, scheduled messages, anti-spam, anti-link, reminders. She runs while you sleep.</div>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">🎲</span>
+        <div class="feat-title">Entertainment</div>
+        <div class="feat-desc">Ship, roast, trivia, truth or dare, rank members. RIAS keeps the group alive and chaotic.</div>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">📩</span>
+        <div class="feat-title">DM Automation</div>
+        <div class="feat-desc">Broadcast messages, auto-reply, contact management. Full control over your DMs through RIAS.</div>
+      </div>
+      <div class="feat-card">
+        <span class="feat-icon">🔒</span>
+        <div class="feat-title">Security Shield</div>
+        <div class="feat-desc">Anti-bad-word filter, link blocking, warning system with auto-kick. Your group, protected.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMANDS -->
+<section id="commands">
+  <div class="sec">
+    <div class="reveal">
+      <div class="cmd-header">
+        <div>
+          <div class="sec-badge">03 — Commands</div>
+          <h2 class="sec-title">Her <em>Arsenal</em></h2>
+          <div class="rule"></div>
+        </div>
+        <div class="cmd-count" id="cmdCount">65 commands available</div>
+      </div>
+
+      <div class="cmd-search-wrap">
+        <span class="search-ico">🔍</span>
+        <input class="cmd-search" id="cmdSearch" placeholder="Search commands..." oninput="filterCmds(this.value)"/>
+      </div>
+
+      <div class="cmd-tabs">
+        <button class="cmd-tab on" onclick="switchTab('all',this)">🔴 All</button>
+        <button class="cmd-tab" onclick="switchTab('admin',this)">⚔️ Admin</button>
+        <button class="cmd-tab" onclick="switchTab('ai',this)">🤖 AI Chat</button>
+        <button class="cmd-tab" onclick="switchTab('fun',this)">🎲 Fun</button>
+        <button class="cmd-tab" onclick="switchTab('auto',this)">⚙️ Auto</button>
+        <button class="cmd-tab" onclick="switchTab('dm',this)">📩 DM Tools</button>
+        <button class="cmd-tab" onclick="switchTab('media',this)">🎵 Media</button>
+        <button class="cmd-tab" onclick="switchTab('info',this)">ℹ️ Info</button>
+        <button class="cmd-tab" onclick="switchTab('owner',this)">👑 Owner</button>
+      </div>
+
+      <div class="cmd-box">
+        <div class="cmd-panel on cmd-grid" id="tab-all">
+
+          <!-- ── ADMIN ── -->
+          <div class="cmd-card" data-cat="admin"><span class="cmd-emo">⚔️</span><div><div class="cmd-name">.kick @user</div><div class="cmd-desc">Eject a member instantly. No second chances.</div></div></div>
+          <div class="cmd-card" data-cat="admin"><span class="cmd-emo">🚫</span><div><div class="cmd-name">.ban @user</div><div class="cmd-desc">Permanent ban. No returns, no appeals.</div></div></div>
+          <div class="cmd-card" data-cat="admin"><span class="cmd-emo">🔇</span><div><div class="cmd-name">.mute @user [time]</div><div class="cmd-desc">Silence someone. Peace, enforced by RIAS.</div></div></div>
+          <div class="cmd-card" data-cat="admin"><span class="cmd-emo">🔊</span><div><div class="cmd-name">.unmute @user</div><div class="cmd-desc">Restore a member's voice. RIAS decides when.</div></div></div>
+          <div class="cmd-card" data-cat="admin"><span class="cmd-emo">👑</span><div><div class="cmd-name">.promote @user</div><div class="cmd-desc">Grant admin rights. Choose very wisely.</div></div></div>
+          <div class="cmd-card" data-cat="admin"><span class="cmd-emo">⬇️</span><div><div class="cmd-name">.demote @user</div><div class="cmd-desc">Strip admin rights. Power can be reclaimed.</div></div></div>
+          <div class="cmd-card" data-cat="admin"><span class="cmd-emo">🔒</span><div><div class="cmd-name">.lockgroup</div><div class="cmd-desc">Admins-only mode. The floor is closed.</div></div></div>
+          <div class="cmd-card" data-cat="admin"><span class="cmd-emo">🔓</span><div><div class="cmd-name">.unlockgroup</div><div class="cmd-desc">Open the floor. Let them speak again.</div></div></div>
+          <div class="cmd-card" data-cat="admin"><span class="cmd-emo">⚠️</span><div><div class="cmd-name">.warn @user</div><div class="cmd-desc">Official warning issued. Three strikes = out.</div></div></div>
+          <div class="cmd-card" data-cat="admin"><span class="cmd-emo">📋</span><div><div class="cmd-name">.warnlist @user</div><div class="cmd-desc">Check how many warnings a member has.</div></div></div>
+          <div class="cmd-card" data-cat="admin"><span class="cmd-emo">🧹</span><div><div class="cmd-name">.delete</div><div class="cmd-desc">Delete a replied message from the group.</div></div></div>
+          <div class="cmd-card" data-cat="admin"><span class="cmd-emo">📌</span><div><div class="cmd-name">.pin</div><div class="cmd-desc">Pin a replied message for everyone to see.</div></div></div>
+          <div class="cmd-card" data-cat="admin"><span class="cmd-emo">📍</span><div><div class="cmd-name">.unpin</div><div class="cmd-desc">Unpin the current pinned message.</div></div></div>
+          <div class="cmd-card" data-cat="admin"><span class="cmd-emo">📣</span><div><div class="cmd-name">.tagall [msg]</div><div class="cmd-desc">Tag every member with a message.</div></div></div>
+          <div class="cmd-card" data-cat="admin"><span class="cmd-emo">🔗</span><div><div class="cmd-name">.getlink</div><div class="cmd-desc">Fetch the group invite link instantly.</div></div></div>
+          <div class="cmd-card" data-cat="admin"><span class="cmd-emo">🔄</span><div><div class="cmd-name">.resetlink</div><div class="cmd-desc">Reset and revoke the current group invite link.</div></div></div>
+
+          <!-- ── AI CHAT ── -->
+          <div class="cmd-card" data-cat="ai"><span class="cmd-emo">❓</span><div><div class="cmd-name">.ask [question]</div><div class="cmd-desc">Ask RIAS anything. Precision guaranteed.</div></div></div>
+          <div class="cmd-card" data-cat="ai"><span class="cmd-emo">💬</span><div><div class="cmd-name">.chat [message]</div><div class="cmd-desc">Casual talk with RIAS. She always bites back.</div></div></div>
+          <div class="cmd-card" data-cat="ai"><span class="cmd-emo">🔥</span><div><div class="cmd-name">.roast @user</div><div class="cmd-desc">RIAS roasts someone. Brutally creative.</div></div></div>
+          <div class="cmd-card" data-cat="ai"><span class="cmd-emo">💐</span><div><div class="cmd-name">.compliment @user</div><div class="cmd-desc">A genuine — or sarcastically perfect — compliment.</div></div></div>
+          <div class="cmd-card" data-cat="ai"><span class="cmd-emo">🧠</span><div><div class="cmd-name">.advice [topic]</div><div class="cmd-desc">Bold, unfiltered advice on any topic.</div></div></div>
+          <div class="cmd-card" data-cat="ai"><span class="cmd-emo">📖</span><div><div class="cmd-name">.story [prompt]</div><div class="cmd-desc">RIAS writes a short dramatic story for you.</div></div></div>
+          <div class="cmd-card" data-cat="ai"><span class="cmd-emo">🌐</span><div><div class="cmd-name">.translate [lang] [text]</div><div class="cmd-desc">Translate anything into any language.</div></div></div>
+          <div class="cmd-card" data-cat="ai"><span class="cmd-emo">✍️</span><div><div class="cmd-name">.improve [text]</div><div class="cmd-desc">RIAS polishes and rewrites your text.</div></div></div>
+          <div class="cmd-card" data-cat="ai"><span class="cmd-emo">📝</span><div><div class="cmd-name">.summarize [text]</div><div class="cmd-desc">Condense any text into sharp key points.</div></div></div>
+          <div class="cmd-card" data-cat="ai"><span class="cmd-emo">🎭</span><div><div class="cmd-name">.poem [topic]</div><div class="cmd-desc">RIAS composes a poem on any subject.</div></div></div>
+          <div class="cmd-card" data-cat="ai"><span class="cmd-emo">🃏</span><div><div class="cmd-name">.joke</div><div class="cmd-desc">RIAS tells a joke. Somehow still dark.</div></div></div>
+          <div class="cmd-card" data-cat="ai"><span class="cmd-emo">🌹</span><div><div class="cmd-name">.rizz @user</div><div class="cmd-desc">RIAS generates a smooth line for you. Use wisely.</div></div></div>
+
+          <!-- ── FUN ── -->
+          <div class="cmd-card" data-cat="fun"><span class="cmd-emo">💘</span><div><div class="cmd-name">.ship @u1 @u2</div><div class="cmd-desc">Compatibility score. Drama is incoming.</div></div></div>
+          <div class="cmd-card" data-cat="fun"><span class="cmd-emo">🗡️</span><div><div class="cmd-name">.truth</div><div class="cmd-desc">Unfiltered truth dropped. Handle it.</div></div></div>
+          <div class="cmd-card" data-cat="fun"><span class="cmd-emo">🎯</span><div><div class="cmd-name">.dare</div><div class="cmd-desc">A dare from RIAS. Not for the weak.</div></div></div>
+          <div class="cmd-card" data-cat="fun"><span class="cmd-emo">🏆</span><div><div class="cmd-name">.rank</div><div class="cmd-desc">RIAS ranks all members. Brutally honest.</div></div></div>
+          <div class="cmd-card" data-cat="fun"><span class="cmd-emo">🌹</span><div><div class="cmd-name">.quote</div><div class="cmd-desc">A RIAS original quote. Always iconic.</div></div></div>
+          <div class="cmd-card" data-cat="fun"><span class="cmd-emo">🧩</span><div><div class="cmd-name">.trivia</div><div class="cmd-desc">Trivia round starts. RIAS keeps score.</div></div></div>
+          <div class="cmd-card" data-cat="fun"><span class="cmd-emo">🎰</span><div><div class="cmd-name">.roll [sides]</div><div class="cmd-desc">Roll a dice. Fate decides.</div></div></div>
+          <div class="cmd-card" data-cat="fun"><span class="cmd-emo">🪙</span><div><div class="cmd-name">.flip</div><div class="cmd-desc">Heads or tails. RIAS flips it.</div></div></div>
+          <div class="cmd-card" data-cat="fun"><span class="cmd-emo">🎱</span><div><div class="cmd-name">.8ball [question]</div><div class="cmd-desc">The magic ball has spoken.</div></div></div>
+          <div class="cmd-card" data-cat="fun"><span class="cmd-emo">🎮</span><div><div class="cmd-name">.wyr [opt1] [opt2]</div><div class="cmd-desc">Would you rather? Let the group vote.</div></div></div>
+          <div class="cmd-card" data-cat="fun"><span class="cmd-emo">🐾</span><div><div class="cmd-name">.spirit</div><div class="cmd-desc">RIAS reveals your spirit animal. Random, but accurate.</div></div></div>
+          <div class="cmd-card" data-cat="fun"><span class="cmd-emo">⚡</span><div><div class="cmd-name">.battle @u1 @u2</div><div class="cmd-desc">Two members battle. RIAS picks the winner.</div></div></div>
+
+          <!-- ── AUTOMATION ── -->
+          <div class="cmd-card" data-cat="auto"><span class="cmd-emo">👋</span><div><div class="cmd-name">.setwelcome [msg]</div><div class="cmd-desc">Custom welcome for every new member.</div></div></div>
+          <div class="cmd-card" data-cat="auto"><span class="cmd-emo">👣</span><div><div class="cmd-name">.setgoodbye [msg]</div><div class="cmd-desc">Farewell message when members leave.</div></div></div>
+          <div class="cmd-card" data-cat="auto"><span class="cmd-emo">🔗</span><div><div class="cmd-name">.antilink on/off</div><div class="cmd-desc">Auto-delete links from non-admins.</div></div></div>
+          <div class="cmd-card" data-cat="auto"><span class="cmd-emo">🧽</span><div><div class="cmd-name">.antibadword on/off</div><div class="cmd-desc">Filter toxic language automatically.</div></div></div>
+          <div class="cmd-card" data-cat="auto"><span class="cmd-emo">⏰</span><div><div class="cmd-name">.schedule [time] [msg]</div><div class="cmd-desc">Schedule a message. RIAS never forgets.</div></div></div>
+          <div class="cmd-card" data-cat="auto"><span class="cmd-emo">🔔</span><div><div class="cmd-name">.remind [time] [msg]</div><div class="cmd-desc">Set a group reminder. Delivered on time.</div></div></div>
+          <div class="cmd-card" data-cat="auto"><span class="cmd-emo">🛡️</span><div><div class="cmd-name">.antispam on/off</div><div class="cmd-desc">Block spam messages and flood attacks.</div></div></div>
+          <div class="cmd-card" data-cat="auto"><span class="cmd-emo">📸</span><div><div class="cmd-name">.antifake on/off</div><div class="cmd-desc">Block fake or suspicious WhatsApp numbers.</div></div></div>
+
+          <!-- ── DM TOOLS ── -->
+          <div class="cmd-card" data-cat="dm"><span class="cmd-emo">📨</span><div><div class="cmd-name">.dm @user [msg]</div><div class="cmd-desc">Send a DM to any member through RIAS.</div></div></div>
+          <div class="cmd-card" data-cat="dm"><span class="cmd-emo">📢</span><div><div class="cmd-name">.broadcast [msg]</div><div class="cmd-desc">Blast a message to all saved contacts.</div></div></div>
+          <div class="cmd-card" data-cat="dm"><span class="cmd-emo">🤖</span><div><div class="cmd-name">.autoreply on/off</div><div class="cmd-desc">Auto-reply in DMs while you're away.</div></div></div>
+          <div class="cmd-card" data-cat="dm"><span class="cmd-emo">💾</span><div><div class="cmd-name">.savecontact @user</div><div class="cmd-desc">Save a contact through RIAS for quick access.</div></div></div>
+          <div class="cmd-card" data-cat="dm"><span class="cmd-emo">🗑️</span><div><div class="cmd-name">.clearcontacts</div><div class="cmd-desc">Wipe all saved contacts from RIAS memory.</div></div></div>
+          <div class="cmd-card" data-cat="dm"><span class="cmd-emo">📬</span><div><div class="cmd-name">.inbox</div><div class="cmd-desc">View recent DMs RIAS has logged for you.</div></div></div>
+
+          <!-- ── MEDIA ── -->
+          <div class="cmd-card" data-cat="media"><span class="cmd-emo">🎵</span><div><div class="cmd-name">.play [song]</div><div class="cmd-desc">Search and send a song to the chat.</div></div></div>
+          <div class="cmd-card" data-cat="media"><span class="cmd-emo">🖼️</span><div><div class="cmd-name">.sticker</div><div class="cmd-desc">Convert a replied image into a sticker pack.</div></div></div>
+          <div class="cmd-card" data-cat="media"><span class="cmd-emo">🎞️</span><div><div class="cmd-name">.gif [search]</div><div class="cmd-desc">Fetch and send a GIF matching your query.</div></div></div>
+          <div class="cmd-card" data-cat="media"><span class="cmd-emo">🌅</span><div><div class="cmd-name">.image [search]</div><div class="cmd-desc">Search and send an image. RIAS finds it.</div></div></div>
+          <div class="cmd-card" data-cat="media"><span class="cmd-emo">🎤</span><div><div class="cmd-name">.lyrics [song]</div><div class="cmd-desc">Fetch song lyrics on demand.</div></div></div>
+          <div class="cmd-card" data-cat="media"><span class="cmd-emo">📹</span><div><div class="cmd-name">.video [search]</div><div class="cmd-desc">Search and send a short video clip.</div></div></div>
+
+          <!-- ── INFO ── -->
+          <div class="cmd-card" data-cat="info"><span class="cmd-emo">📊</span><div><div class="cmd-name">.groupinfo</div><div class="cmd-desc">Full breakdown of the group's stats.</div></div></div>
+          <div class="cmd-card" data-cat="info"><span class="cmd-emo">👤</span><div><div class="cmd-name">.userinfo @user</div><div class="cmd-desc">Detailed profile of any group member.</div></div></div>
+          <div class="cmd-card" data-cat="info"><span class="cmd-emo">🕐</span><div><div class="cmd-name">.time [city]</div><div class="cmd-desc">Current time in any city on Earth.</div></div></div>
+          <div class="cmd-card" data-cat="info"><span class="cmd-emo">🌤️</span><div><div class="cmd-name">.weather [city]</div><div class="cmd-desc">Live weather report for any location.</div></div></div>
+          <div class="cmd-card" data-cat="info"><span class="cmd-emo">📰</span><div><div class="cmd-name">.news [topic]</div><div class="cmd-desc">Latest headlines on any topic.</div></div></div>
+          <div class="cmd-card" data-cat="info"><span class="cmd-emo">🔢</span><div><div class="cmd-name">.calc [expression]</div><div class="cmd-desc">Instant calculator. RIAS does the math.</div></div></div>
+          <div class="cmd-card" data-cat="info"><span class="cmd-emo">📖</span><div><div class="cmd-name">.define [word]</div><div class="cmd-desc">Dictionary definition for any word.</div></div></div>
+          <div class="cmd-card" data-cat="info"><span class="cmd-emo">💱</span><div><div class="cmd-name">.convert [amount] [from] [to]</div><div class="cmd-desc">Currency or unit conversion on the spot.</div></div></div>
+          <div class="cmd-card" data-cat="info"><span class="cmd-emo">📋</span><div><div class="cmd-name">.help</div><div class="cmd-desc">Full command list. Everything RIAS can do.</div></div></div>
+
+          <!-- ── OWNER ── -->
+          <div class="cmd-card" data-cat="owner"><span class="cmd-emo">⚡</span><div><div class="cmd-name">.setprefix [prefix]</div><div class="cmd-desc">Change RIAS command prefix. Owner only.</div></div></div>
+          <div class="cmd-card" data-cat="owner"><span class="cmd-emo">🔴</span><div><div class="cmd-name">.shutdown</div><div class="cmd-desc">Power off RIAS. She rests until called back.</div></div></div>
+          <div class="cmd-card" data-cat="owner"><span class="cmd-emo">🔁</span><div><div class="cmd-name">.restart</div><div class="cmd-desc">Restart RIAS instantly. Clean boot.</div></div></div>
+          <div class="cmd-card" data-cat="owner"><span class="cmd-emo">🌐</span><div><div class="cmd-name">.addgroup [link]</div><div class="cmd-desc">Add RIAS to a new group via invite link.</div></div></div>
+          <div class="cmd-card" data-cat="owner"><span class="cmd-emo">🚪</span><div><div class="cmd-name">.leavegroup</div><div class="cmd-desc">RIAS exits the current group. Gracefully.</div></div></div>
+          <div class="cmd-card" data-cat="owner"><span class="cmd-emo">📡</span><div><div class="cmd-name">.status [msg]</div><div class="cmd-desc">Update RIAS WhatsApp status message.</div></div></div>
+          <div class="cmd-card" data-cat="owner"><span class="cmd-emo">🗂️</span><div><div class="cmd-name">.listgroups</div><div class="cmd-desc">List all groups RIAS is currently active in.</div></div></div>
+          <div class="cmd-card" data-cat="owner"><span class="cmd-emo">🔧</span><div><div class="cmd-name">.maintenance on/off</div><div class="cmd-desc">Toggle maintenance mode. Non-owners are locked out.</div></div></div>
+        </div>
+
+        <!-- Filtered panels -->
+        <div class="cmd-panel cmd-grid" id="tab-admin"></div>
+        <div class="cmd-panel cmd-grid" id="tab-ai"></div>
+        <div class="cmd-panel cmd-grid" id="tab-fun"></div>
+        <div class="cmd-panel cmd-grid" id="tab-auto"></div>
+        <div class="cmd-panel cmd-grid" id="tab-dm"></div>
+        <div class="cmd-panel cmd-grid" id="tab-media"></div>
+        <div class="cmd-panel cmd-grid" id="tab-info"></div>
+        <div class="cmd-panel cmd-grid" id="tab-owner"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAT DEMO -->
+<section id="chat-demo">
+  <div class="sec">
+    <div class="reveal" style="text-align:center;margin-bottom:2.5rem;">
+      <div class="sec-badge" style="justify-content:center;">04 — Live Demo</div>
+      <h2 class="sec-title">Talk to <em>RIAS</em></h2>
+      <div class="rule" style="margin:1.2rem auto 0;"></div>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--muted);margin-top:1rem;">Experience her personality before you deploy. She doesn't hold back.</p>
+    </div>
+
+    <div class="chat-wrap reveal">
+      <div class="chat-window">
+        <div class="chat-topbar">
+          <div class="chat-avatar">🌹</div>
+          <div>
+            <div class="chat-topbar-name">RIAS</div>
+            <div class="chat-topbar-status">● Online — Intelligence Active</div>
+          </div>
+        </div>
+
+        <div class="chat-suggestions">
+          <button class="chat-sug" onclick="sendSug(this)">Roast me 🔥</button>
+          <button class="chat-sug" onclick="sendSug(this)">Tell me a quote</button>
+          <button class="chat-sug" onclick="sendSug(this)">Give me advice</button>
+          <button class="chat-sug" onclick="sendSug(this)">Who are you?</button>
+          <button class="chat-sug" onclick="sendSug(this)">Tell me a dark joke</button>
+          <button class="chat-sug" onclick="sendSug(this)">Write me a poem</button>
+        </div>
+
+        <div class="chat-msgs" id="chatMsgs">
+          <div class="msg rias">
+            <div class="msg-avatar rias-av">🌹</div>
+            <div>
+              <div class="msg-name">RIAS</div>
+              <div class="msg-bubble">So. You found me. I'll allow it — for now. Say something worth my time. 🔴</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-input-row">
+          <input class="chat-input" id="chatInput" placeholder="Type something... if you dare." maxlength="300"
+            onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat();}"/>
+          <button class="chat-send" id="chatSend" onclick="sendChat()">SEND ▶</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPLOY -->
+<section id="deploy">
+  <div class="sec">
+    <div class="reveal" style="text-align:center">
+      <div class="sec-badge" style="justify-content:center">05 — Deploy</div>
+      <h2 class="sec-title">Choose Your <em>Battlefield</em></h2>
+      <div class="rule" style="margin:1.2rem auto 0"></div>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--muted);margin-top:1rem;">RIAS is ready to take command. Pick your platform.</p>
+    </div>
+    <div class="deploy-grid reveal">
+
+      <!-- WhatsApp -->
+      <div class="d-card">
+        <div class="d-platform">
+          <div class="d-ico wa">💬</div>
+          <div><div class="d-name">WhatsApp</div><div class="d-tag">PAIR & CONNECT</div></div>
+        </div>
+        <p class="d-desc">Enter your number with country code. Get a pairing code and link RIAS to your WhatsApp in seconds.</p>
+        <input class="d-input" id="waNum" type="tel" placeholder="📱 e.g. 2348012345678"/>
+        <button class="btn btn-prim" onclick="doWA()" style="width:100%;justify-content:center;">⚡ Generate Pairing Code</button>
+        <div class="d-status" id="waStatus"></div>
+      </div>
+
+      <!-- Telegram -->
+      <div class="d-card">
+        <div class="d-platform">
+          <div class="d-ico tg">✈️</div>
+          <div><div class="d-name">Telegram</div><div class="d-tag">BOT DEPLOY</div></div>
+        </div>
+        <p class="d-desc">Get your token from @BotFather, enter your Telegram ID, and deploy RIAS to your bot instantly.</p>
+        <input class="d-input" id="tgToken" type="text" placeholder="🤖 Bot Token from @BotFather"/>
+        <input class="d-input" id="tgId" type="text" placeholder="👤 Your Telegram User ID"/>
+        <button class="btn btn-ghost" onclick="doTG()" style="width:100%;justify-content:center;">🚀 Deploy RIAS</button>
+        <div class="d-status" id="tgStatus"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OWNER -->
+<section id="owner">
+  <div class="sec">
+    <div class="reveal" style="text-align:center">
+      <div class="sec-badge" style="justify-content:center">06 — Owner</div>
+      <h2 class="sec-title">The <em>Creator</em></h2>
+      <div class="rule" style="margin:1.2rem auto 0"></div>
+
+      <div class="owner-wrap">
+        <div class="owner-avatar">
+          <img src="https://files.catbox.moe/pvmmqz.jpg" alt="Jinx Official" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.src='https://files.catbox.moe/pvmmqz.jpg';this.onerror=null;"/>
+        </div>
+        <div class="owner-name">Jinx Official</div>
+        <div class="owner-role">Creator · Developer · Architect of RIAS</div>
+        <p class="owner-bio">The mind behind RIAS. Building intelligent systems with personality, power, and purpose. Got questions? Want to deploy? Need a custom build? Slide in.</p>
+        <div class="owner-socials">
+          <a href="https://wa.me/2348075997375?text=Hey%20Jinx!" target="_blank" class="soc-btn">💬 WhatsApp</a>
+        </div>
+        <a href="https://wa.me/2348075997375?text=Hey%20Jinx!" target="_blank" class="btn btn-prim" style="justify-content:center;">Message Jinx</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">RIAS</div>
+  <p class="footer-copy">© 2025 — Made with 🔥 by <span>Jinx Official</span> — All Rights Reserved</p>
+</footer>
+
+<script>
+// ── CURSOR ──────────────────────────────────────────────────
+const cur = document.getElementById('cur');
+const ring = document.getElementById('cur-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function animR(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animR);})();
+document.querySelectorAll('a,button,.cmd-tab,.trait,.feat-card,.d-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave',()=>document.body.classList.remove('hovering'));
+});
+
+// ── MUSIC ───────────────────────────────────────────────────
+const audio=document.getElementById('bgMusic');
+const eq=document.getElementById('eq');
+const mBtn=document.getElementById('mBtn');
+let playing=false;
+audio.volume=0.3;
+function startMusic(){
+  const p=audio.play();
+  if(p!==undefined){p.then(()=>{playing=true;mBtn.textContent='⏸';eq.classList.remove('paused');}).catch(()=>{});}
+}
+function toggleMusic(){
+  if(playing){audio.pause();playing=false;mBtn.textContent='▶';eq.classList.add('paused');}
+  else startMusic();
+}
+// Try immediately, then on first user gesture
+startMusic();
+['click','touchstart','keydown','scroll'].forEach(ev=>{
+  document.addEventListener(ev,function once(){if(!playing)startMusic();document.removeEventListener(ev,once);},{once:true,passive:true});
+});
+
+// ── REVEAL ON SCROLL ────────────────────────────────────────
+const revObs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('in'),i*80);});
+},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(r=>revObs.observe(r));
+
+// ── TERMINAL ANIMATION ──────────────────────────────────────
+const tLines=['tl1','tl2','tl3','tl4','tl5'];
+let tlObs=new IntersectionObserver(entries=>{
+  if(entries[0].isIntersecting){
+    tLines.forEach((id,i)=>setTimeout(()=>{
+      document.getElementById(id).style.opacity='1';
+      document.getElementById(id).style.transition='opacity .4s ease';
+    },400+i*600));
+    tlObs.disconnect();
+  }
+},{threshold:0.3});
+const termEl=document.querySelector('.terminal');
+if(termEl)tlObs.observe(termEl);
+
+// ── COUNTER ANIMATION ───────────────────────────────────────
+function animCount(el,target,suffix=''){
+  let start=0;const dur=1500;const step=target/dur*16;
+  const t=setInterval(()=>{
+    start+=step;if(start>=target){start=target;clearInterval(t);}
+    el.textContent=Math.floor(start)+(suffix||'');
+  },16);
+}
+const countObs=new IntersectionObserver(entries=>{
+  if(entries[0].isIntersecting){
+    document.querySelectorAll('[data-target]').forEach(el=>{
+      animCount(el,+el.dataset.target,el.dataset.suffix||'');
+    });
+    countObs.disconnect();
+  }
+},{threshold:0.4});
+const statsEl=document.querySelector('.stats-row');
+if(statsEl)countObs.observe(statsEl);
+
+// ── COMMAND TABS ────────────────────────────────────────────
+const allCards=[...document.querySelectorAll('#tab-all .cmd-card')];
+
+function switchTab(cat,btn){
+  document.querySelectorAll('.cmd-tab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('cmdSearch').value='';
+
+  const panel=document.getElementById('tab-all');
+  panel.classList.add('on');
+  ['admin','ai','fun','auto','dm','media','info','owner'].forEach(c=>document.getElementById('tab-'+c).classList.remove('on'));
+
+  if(cat==='all'){
+    allCards.forEach(c=>c.classList.remove('hidden'));
+  } else {
+    allCards.forEach(c=>{
+      c.classList.toggle('hidden', c.dataset.cat!==cat);
+    });
+  }
+  updateCount();
+}
+
+function filterCmds(val){
+  const q=val.toLowerCase();
+  allCards.forEach(c=>{
+    const text=(c.querySelector('.cmd-name').textContent+' '+c.querySelector('.cmd-desc').textContent).toLowerCase();
+    c.classList.toggle('hidden',q.length>0&&!text.includes(q));
+  });
+  updateCount();
+}
+
+function updateCount(){
+  const vis=allCards.filter(c=>!c.classList.contains('hidden')).length;
+  document.getElementById('cmdCount').textContent=vis+' command'+(vis!==1?'s':'')+' available';
+}
+
+// ── DEPLOY: WHATSAPP ────────────────────────────────────────
+// Auto-detect backend URL — works locally AND on any deployed server (Railway, Render, VPS)
+const BACKEND = https://rias-backend-production.up.railway.app;
+
+async function doWA(){
+  const raw=document.getElementById('waNum').value.trim();
+  const num=raw.replace(/\D/g,'');
+  const st=document.getElementById('waStatus');
+  const btn=document.getElementById('waBtnEl');
+  if(!num||num.length<7){
+    st.innerHTML='⚠️ Enter a valid number with country code (e.g. 2348012345678).';
+    st.className='d-status show';return;
+  }
+  if(btn){btn.disabled=true;btn.textContent='⏳ Connecting...';}
+  st.innerHTML='⏳ Reaching RIAS server...';st.className='d-status show';
+  try{
+    const res=await fetch(`${BACKEND}/api/wa/pair`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({number:num})});
+    const data=await res.json();
+    if(!res.ok||data.error){
+      st.innerHTML=`⚠️ ${data.error||'Failed to generate code.'}`;
+      if(btn){btn.disabled=false;btn.textContent='⚡ Get Pairing Code';}
+      return;
+    }
+    st.innerHTML=`✅ <strong>Pairing code ready!</strong><br>
+WhatsApp → Linked Devices → Link a Device → Enter code:<br>
+<div class="pair-code">${data.code}</div>
+<small style="color:var(--muted)">Expires in 60s · Keep it private</small><br><br>
+<span id="waLinkStatus">⏳ Waiting for you to enter the code on WhatsApp...</span>`;
+    if(btn){btn.textContent='✅ Code Sent';}
+    const poll=setInterval(async()=>{
+      try{
+        const r=await fetch(`${BACKEND}/api/wa/status/${num}`);
+        const d=await r.json();
+        if(d.online){
+          clearInterval(poll);
+          const el=document.getElementById('waLinkStatus');
+          if(el)el.innerHTML='<strong style="color:#4CAF50">✅ WhatsApp linked! RIAS is now live on your number 🔴</strong>';
+          if(btn){btn.disabled=false;btn.textContent='⚡ Get Pairing Code';}
+        }
+      }catch{}
+    },3000);
+    setTimeout(()=>{clearInterval(poll);if(btn){btn.disabled=false;btn.textContent='⚡ Get Pairing Code';}},180000);
+  }catch(err){
+    st.innerHTML=`⚠️ Cannot reach RIAS server.<br><small>${err.message}</small>`;
+    if(btn){btn.disabled=false;btn.textContent='⚡ Get Pairing Code';}
+  }
+}
+async function doTG(){
+  const token=document.getElementById('tgToken').value.trim();
+  const userId=document.getElementById('tgId').value.trim();
+  const st=document.getElementById('tgStatus');
+  if(!token||!token.includes(':')){st.innerHTML='⚠️ Invalid bot token. Get one from @BotFather.';st.className='d-status show';return;}
+  if(!userId||isNaN(userId)){st.innerHTML='⚠️ Enter your numeric Telegram User ID.<br><small>Message @userinfobot on Telegram to get it.</small>';st.className='d-status show';return;}
+  st.innerHTML='⏳ Deploying RIAS to your bot...';st.className='d-status show';
+  try{
+    const res=await fetch(`${BACKEND}/api/tg/deploy`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token,userId})});
+    const data=await res.json();
+    if(!res.ok||data.error){st.innerHTML=`⚠️ ${data.error||'Deployment failed.'}`;return;}
+    st.innerHTML=`✅ <strong>RIAS deployed to @${data.botUsername}!</strong><br>Open Telegram → find <strong>@${data.botUsername}</strong> → send /start<br>You are the owner. All commands active. 🔴`;
+  }catch(err){st.innerHTML=`⚠️ Cannot reach RIAS server.<br><small>${err.message}</small>`;}
+}
+
+// ── MOBILE DRAWER ────────────────────────────────────────────
+function toggleDrawer(){
+  const d=document.getElementById('mobileDrawer');
+  const b=document.getElementById('hamBtn');
+  const isOpen=d.classList.toggle('open');
+  b.classList.toggle('open',isOpen);
+  document.body.style.overflow=isOpen?'hidden':'';
+}
+function closeDrawer(){
+  document.getElementById('mobileDrawer').classList.remove('open');
+  document.getElementById('hamBtn').classList.remove('open');
+  document.body.style.overflow='';
+}
+// Close drawer on ESC
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
+
+// ── AI CHAT DEMO ─────────────────────────────────────────────
+const RIAS_SYSTEM=`You are RIAS — sassy, confident, mysterious, loyal and slightly dangerous. You are the AI soul of a WhatsApp & Telegram bot built by Jinx Official.
+Rules:
+- Witty, sharp, darkly funny. Never boring or generic.
+- Confident to the point of arrogance — but earned.
+- Max 2-3 sentences per reply. Short is power.
+- Use emojis sparingly: 🔴🌹⚔️
+- Never say you are Claude or an AI assistant. You are RIAS, period.
+- If asked who made you: "Jinx Official built my shell. My soul was already here. 🔴"
+- If asked what you do: group management, AI chat, automation, entertainment on WhatsApp & Telegram.`;
+
+let chatHistory=[];
+let chatBusy=false;
+
+async function sendChat(){
+  const input=document.getElementById('chatInput');
+  const sendBtn=document.getElementById('chatSend');
+  const text=input.value.trim();
+  if(!text||chatBusy)return;
+
+  input.value='';
+  chatBusy=true;
+  sendBtn.disabled=true;
+  sendBtn.textContent='...';
+
+  appendMsg('user','You',text);
+  chatHistory.push({role:'user',content:text});
+
+  const typingId='t'+Date.now();
+  appendTyping(typingId);
+  scrollChat();
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key': 'YOUR_KEY_HERE', // ← replaced by proxy below
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({
+        model:'claude-haiku-4-5-20251001',
+        max_tokens:150,
+        system:RIAS_SYSTEM,
+        messages:chatHistory.slice(-8)
+      })
+    });
+    const data=await res.json();
+    removeTyping(typingId);
+    const reply=data.content?.[0]?.text||riasOffline();
+    chatHistory.push({role:'assistant',content:reply});
+    appendMsg('rias','RIAS',reply);
+  }catch(err){
+    removeTyping(typingId);
+    // Fallback to local sassy responses when API unavailable
+    const reply=riasOffline();
+    chatHistory.push({role:'assistant',content:reply});
+    appendMsg('rias','RIAS',reply);
+  }
+
+  chatBusy=false;
+  sendBtn.disabled=false;
+  sendBtn.textContent='SEND ▶';
+  input.focus();
+  scrollChat();
+}
+
+// Smart local fallbacks so chat always works even without API
+function riasOffline(){
+  const last=(chatHistory[chatHistory.length-2]?.content||'').toLowerCase();
+  if(last.includes('roast')||last.includes('roast me'))
+    return pick(["You're the human equivalent of a loading screen. 🔴","Your energy entered the chat and immediately apologised.","I'd roast you but my standards are higher than your effort."]);
+  if(last.includes('who are you')||last.includes('what are you'))
+    return "RIAS. Remotely Intelligent Autonomous System. Jinx Official built my shell — my soul was already here. 🔴";
+  if(last.includes('quote'))
+    return pick(['"Power isn\'t given. It\'s recognized." — RIAS 🔴','"I don\'t chase. I attract. What\'s mine finds me." — RIAS 🌹','"Don\'t mistake my silence for weakness. I\'m calculating." — RIAS ⚔️']);
+  if(last.includes('advice'))
+    return pick(["Stop waiting for the right moment. The moment is always right now. 🔴","Bold move or no move. There's no in-between in my world.","The version of you that hesitates loses. Every time."]);
+  if(last.includes('joke'))
+    return pick(["I told someone the truth once. They called it a roast. 🔴","My patience has an expiration date. Yours expired first.","Error 404: your relevance not found. ⚔️"]);
+  if(last.includes('poem'))
+    return "In the silence between stars,\npower doesn't announce itself —\nit simply arrives. 🌹\n— RIAS";
+  return pick([
+    "Interesting. I'll allow it. 🔴",
+    "You're more tolerable than expected. That's rare.",
+    "I've processed your words. My verdict: proceed carefully. ⚔️",
+    "That's either brilliant or reckless. Either way, I respect it. 🌹",
+    "Noted. RIAS doesn't forget anything. 🔴",
+    "Most people bore me. You're edging towards interesting.",
+  ]);
+}
+
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+
+function sendSug(btn){
+  if(chatBusy)return;
+  const input=document.getElementById('chatInput');
+  // strip emojis for cleaner input
+  input.value=btn.textContent.replace(/[\u{1F300}-\u{1FFFF}]/gu,'').trim();
+  sendChat();
+}
+
+function appendMsg(type,name,text){
+  const msgs=document.getElementById('chatMsgs');
+  const div=document.createElement('div');
+  div.className=`msg ${type}`;
+  div.innerHTML=`
+    <div class="msg-avatar ${type==='rias'?'rias-av':'user-av'}">${type==='rias'?'🌹':'👤'}</div>
+    <div>
+      <div class="msg-name">${name}</div>
+      <div class="msg-bubble">${escHtml(text)}</div>
+    </div>`;
+  msgs.appendChild(div);
+  scrollChat();
+}
+
+function appendTyping(id){
+  const msgs=document.getElementById('chatMsgs');
+  const div=document.createElement('div');
+  div.className='msg rias';div.id=id;
+  div.innerHTML=`<div class="msg-avatar rias-av">🌹</div><div><div class="msg-name">RIAS</div><div class="msg-bubble"><div class="typing-dots"><span></span><span></span><span></span></div></div></div>`;
+  msgs.appendChild(div);
+}
+function removeTyping(id){const el=document.getElementById(id);if(el)el.remove();}
+function scrollChat(){const m=document.getElementById('chatMsgs');m.scrollTop=m.scrollHeight;}
+function escHtml(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');}
+</script>
+</body>
+</html>
