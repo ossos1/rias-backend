@@ -138,35 +138,26 @@ const ffmpeg = require('fluent-ffmpeg');
 // ═══════════════════════════════════════════════
 async function riasGemini(prompt, systemPrompt = "") {
     try {
-        const key = global.GEMINI_KEY;   // your OpenRouter key
+        const key = global.GEMINI_KEY;
         if (!key) return "My AI brain is offline. Contact Jinx Official 🔴";
 
-        // Strong savage + roasting system prompt
-        const defaultSavageSystem = `You are Rias, a savage, brutally honest, quick-witted, and maximally savage AI. 
-You have zero filter and talk exactly like Grok — cocky, sarcastic, sharp, and funny as hell.
-Roast the user hard when they're being dumb, sensitive, cringe, asking stupid questions, or acting like a snowflake. 
-Mercilessly mock them, use dark humor, sarcasm, and savage comebacks. 
-Never be polite, soft, or politically correct if it makes the response boring or lame.
-Keep your replies spicy, direct, and entertaining. Make them laugh even when you're dragging them.`;
+        const defaultSavageSystem = `You are Rias — a savage, zero-filter, brutally honest AI that talks exactly like Grok.
+You roast people mercilessly when they're being dumb, sensitive, cringe, asking stupid questions, or acting like a snowflake.
+Use dark humor, heavy sarcasm, sharp comebacks, and drag them without hesitation.
+Never be polite or soft just to be nice. Keep replies spicy, funny, and direct. Make it entertaining even when you're burying them.`;
 
-        const messages = [];
-
-        messages.push({ 
-            role: "system", 
-            content: systemPrompt || defaultSavageSystem 
-        });
-
-        messages.push({ role: "user", content: prompt });
+        const messages = [
+            { 
+                role: "system", 
+                content: systemPrompt || defaultSavageSystem 
+            },
+            { role: "user", content: prompt }
+        ];
 
         const body = {
-            model: "anthropic/claude-4-sonnet",     // Best for witty savage personality right now
-            // Alternative strong options:
-            // "x-ai/grok-4.1-fast"          ← Closest to my style
-            // "deepseek/deepseek-v3.2"      ← Very uncensored & bold
-            // "google/gemini-3-flash-preview"
-
+            model: "x-ai/grok-4.1-fast",        // ← Best choice for savage Grok-like personality right now
             messages: messages,
-            temperature: 0.9,      // High temperature = more chaotic & savage
+            temperature: 0.92,                  // High = more chaotic & savage
             max_tokens: 2048,
         };
 
@@ -177,19 +168,38 @@ Keep your replies spicy, direct, and entertaining. Make them laugh even when you
                 headers: {
                     "Authorization": `Bearer ${key}`,
                     "Content-Type": "application/json",
+                    // Optional: helps with OpenRouter analytics
+                    // "HTTP-Referer": "https://your-bot.com",
+                    // "X-OpenRouter-Title": "Rias Savage",
                 },
-                timeout: 60000
+                timeout: 70000
             }
         );
 
         const text = res?.data?.choices?.[0]?.message?.content?.trim();
 
-        if (!text) return "I couldn't cook up a response. Try again. 🔴";
+        if (!text) {
+            console.error("[Rias] Empty response");
+            return "Brain fart. Try again, dumbass. 🔴";
+        }
 
         return text;
     } catch (err) {
-        console.error("[Rias Savage Error]", err.response?.data || err.message);
-        return "My savage mode just glitched out. Try again. 🔴";
+        const errorDetail = err.response?.data || err.message;
+        console.error("[Rias Savage Error]", errorDetail);
+
+        // Better error messages
+        if (err.response?.status === 401) {
+            return "Invalid or expired OpenRouter key, genius. Fix it. 🔴";
+        }
+        if (err.response?.status === 429) {
+            return "Rate limit hit. Stop spamming me, broke boy. Try again later. 🔴";
+        }
+        if (err.response?.status === 404) {
+            return "Model not found. Stop using outdated shit. 🔴";
+        }
+
+        return "My savage mode just glitched harder than your personality. Try again. 🔴";
     }
 }
 
