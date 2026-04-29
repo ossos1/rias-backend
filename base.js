@@ -2311,17 +2311,33 @@ break
 
 case "poll": {
     if (!m.isGroup) return Reply("❌ Group only command!")
+
     if (!q) return Reply(`📊 *Usage:* ${prefix}poll Question | Option1 | Option2 | Option3
 
-Example:
+*Example:*
 ${prefix}poll Best food? | Pizza | Jollof | Shawarma`)
-    const parts = q.split("|").map(p => p.trim())
-    if (parts.length < 3) return Reply("❌ Need at least a question and 2 options!
 
-Example: .poll Best food? | Pizza | Jollof")
+    const parts = q.split("|").map(p => p.trim())
+
+    if (parts.length < 3) {
+        return Reply(`❌ Need at least a question and 2 options!
+
+*Example:*
+${prefix}poll Best food? | Pizza | Jollof`)
+    }
+
     const pollQuestion = parts[0]
     const pollOptions = parts.slice(1)
-    if (pollOptions.length > 12) return Reply("❌ Maximum 12 options allowed!")
+
+    if (pollOptions.length > 12) {
+        return Reply("❌ Maximum 12 options allowed!")
+    }
+
+    // Optional: Check for empty options
+    if (pollOptions.some(opt => opt.length === 0)) {
+        return Reply("❌ Options cannot be empty!")
+    }
+
     await raiden.sendMessage(m.chat, {
         poll: {
             name: pollQuestion,
@@ -2329,8 +2345,9 @@ Example: .poll Best food? | Pizza | Jollof")
             selectableCount: 1
         }
     }, { quoted: m })
-}
-break
+
+    break
+        }
 
 case "groupinfo":
 case "ginfo": {
