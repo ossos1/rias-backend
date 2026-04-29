@@ -372,7 +372,6 @@ const timeNG = new Date().toLocaleTimeString('en-NG', {
 });
 const fullDateTime = `Date: ${dateNG} | Time: ${timeNG}`;
 
-═══════════════════════════════════════════════
 //  👋 WELCOME & GOODBYE HANDLER
 // ═══════════════════════════════════════════════
 raiden.ev.on("group-participants.update", async ({ id, participants, action }) => {
