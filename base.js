@@ -2233,13 +2233,16 @@ break
 
 case "filterlist": {
     if (!m.isGroup) return Reply("❌ Group only command!")
+
     global.wordFilters = global.wordFilters || {}
     const list = global.wordFilters[m.chat] || []
-    if (list.length === 0) return Reply("📋 No words are currently filtered in this group.")
-    Reply(`🚫 *Filtered Words (${list.length}):*
 
-${list.map((w, i) => `${i + 1}. ${w}`).join("
-")}`)
+    if (list.length === 0) 
+        return Reply("📋 No words are currently filtered in this group.")
+
+    const text = list.map((w, i) => `${i + 1}. ${w}`).join("\n")
+
+    Reply(`🚫 *Filtered Words (\( {list.length}):*\n\n \){text}`)
 }
 break
 
